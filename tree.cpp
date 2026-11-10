@@ -1,9 +1,11 @@
 #include "tree.h"
 
+// Рекурсивное удаление поддерева в пост-порядке (сначала дети, потом узел).
 static void destroy(TNode* node) {
     if (node) { destroy(node->left); destroy(node->right); delete node; }
 }
 
+// Обход в ширину (BFS): возвращает узлы в порядке уровней (слева направо).
 std::vector<TNode*> treeNodes(const CBTree& tree) {
     std::vector<TNode*> nodes;
     if (tree.root) nodes.push_back(tree.root);
@@ -14,6 +16,9 @@ std::vector<TNode*> treeNodes(const CBTree& tree) {
     return nodes;
 }
 
+// Вставка с сохранением ПОЛНОТЫ дерева: новый узел должен занять
+// первое свободное место в порядке уровней — либо пустой left,
+// либо пустой right у первого подходящего узла.
 void treeInsert(CBTree& tree, const std::string& key) {
     if (!tree.root) { tree.root = new TNode{key, nullptr, nullptr}; return; }
     std::vector<TNode*> nodes = treeNodes(tree);
@@ -23,10 +28,12 @@ void treeInsert(CBTree& tree, const std::string& key) {
     }
 }
 
+// BFS. Сложность O(n).
 bool treeContains(const CBTree& tree, const std::string& key) {
     std::vector<TNode*> nodes = treeNodes(tree);
     for (std::size_t i = 0; i < nodes.size(); ++i) if (nodes[i]->key == key) return true;
     return false;
 }
 
+// Полная очистка: удаляем все узлы и обнуляем корень.
 void treeClear(CBTree& tree) { destroy(tree.root); tree.root = nullptr; }
