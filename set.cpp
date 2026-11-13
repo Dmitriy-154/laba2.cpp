@@ -9,7 +9,7 @@ static std::size_t bucketOf(int value, std::size_t capacity) {
 
 // Перестройка (rehash) при превышении load factor. Создаём вдвое больше бакетов
 // в новые цепочки переустановкой указателей next, что даёт O(n) без аллокаций.
-// Каждый узел перемещается в голову новой цепочки 
+// Каждый узел перемещается в голову новой цепочки.
 static void rehash(Set& set) {
     std::vector<SList> fresh(set.buckets.size() * 2 + 1);
     for (std::size_t i = 0; i < set.buckets.size(); ++i) {
